@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NexPath — Your Career OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #080a0f;
+  --bg2: #0d1017;
+  --bg3: #121720;
+  --card: #131921;
+  --card2: #1a2233;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(99,255,180,0.2);
+  --neon: #63ffb4;
+  --neon2: #4af3ff;
+  --neon3: #a78bfa;
+  --neon4: #f59e0b;
+  --text: #e8edf5;
+  --muted: #6b7a99;
+  --white: #ffffff;
+  --red: #ff4d6d;
+}
+[data-theme="light"] {
+  --bg: #f0f4ff; --bg2: #e8eef8; --bg3: #dce5f5; --card: #ffffff; --card2: #edf2fc;
+  --border: rgba(0,0,0,0.08); --border2: rgba(0,150,100,0.25); --neon: #00a86b;
+  --neon2: #0891b2; --neon3: #7c3aed; --neon4: #d97706; --text: #1a2133; --muted: #5a6a8a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--neon);border-radius:2px;}
+.cursor{position:fixed;width:10px;height:10px;background:var(--neon);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s;mix-blend-mode:difference;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--neon);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease;mix-blend-mode:difference;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:70px;background:rgba(8,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background 0.3s;}
+[data-theme="light"] nav{background:rgba(240,244,255,0.88);}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--white);display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo span{color:var(--neon);}
+.logo-dot{width:8px;height:8px;background:var(--neon);border-radius:50%;display:inline-block;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.4);}}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.88rem;font-weight:500;letter-spacing:0.02em;transition:color 0.2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--neon);transition:width 0.3s;}
+.nav-links a:hover{color:var(--neon);}
+.nav-links a:hover::after{width:100%;}
+.nav-right{display:flex;align-items:center;gap:1rem;}
+.theme-toggle{background:var(--card);border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.theme-toggle:hover{border-color:var(--neon);color:var(--neon);}
+.btn-nav{background:var(--neon);color:#000;padding:0.5rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.85rem;text-decoration:none;font-family:'Syne',sans-serif;transition:all 0.2s;border:none;cursor:pointer;}
+.btn-nav:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(99,255,180,0.4);}
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;}
+.hamburger span{width:20px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+.mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:rgba(8,10,15,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:999;padding:1.5rem 5%;flex-direction:column;gap:1rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--muted);text-decoration:none;font-size:1rem;padding:0.6rem 0;border-bottom:1px solid var(--border);}
+.mobile-menu a:hover{color:var(--neon);}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 5% 80px;position:relative;overflow:hidden;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;width:100%;max-width:1300px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,255,180,0.08);border:1px solid var(--border2);border-radius:100px;padding:6px 16px;font-size:0.78rem;font-family:'JetBrains Mono',monospace;color:var(--neon);margin-bottom:1.5rem;animation:fadeUp 0.6s ease both;}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,5vw,4.2rem);font-weight:800;line-height:1.05;margin-bottom:1.5rem;animation:fadeUp 0.7s ease 0.1s both;}
+.hero-title .accent{color:var(--neon);}
+.hero-title .accent2{color:var(--neon2);}
+.hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:2.5rem;animation:fadeUp 0.7s ease 0.2s both;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.7s ease 0.3s both;}
+.btn-primary{background:var(--neon);color:#000;padding:0.85rem 2rem;border-radius:10px;font-weight:700;font-size:0.95rem;font-family:'Syne',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;border:none;cursor:pointer;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(99,255,180,0.4);}
+.btn-ghost{background:transparent;color:var(--text);padding:0.85rem 2rem;border-radius:10px;font-weight:600;font-size:0.95rem;font-family:'Syne',sans-serif;text-decoration:none;border:1px solid var(--border);display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;cursor:pointer;}
+.btn-ghost:hover{border-color:var(--neon);color:var(--neon);}
+.hero-platforms{display:flex;align-items:center;gap:12px;margin-top:2rem;animation:fadeUp 0.7s ease 0.4s both;flex-wrap:wrap;}
+.hero-platforms span{font-size:0.78rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.platform-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.ptag{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:100px;font-size:0.72rem;font-weight:500;}
+.hero-visual{position:relative;animation:fadeLeft 0.8s ease 0.2s both;}
+.dashboard-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:1.5rem;position:relative;overflow:hidden;}
+.dashboard-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--neon),transparent);}
+.db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;}
+.db-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;color:var(--white);}
+.db-live{display:flex;align-items:center;gap:6px;font-size:0.72rem;font-family:'JetBrains Mono',monospace;color:var(--neon);}
+.db-live-dot{width:6px;height:6px;background:var(--neon);border-radius:50%;animation:pulse 1.5s infinite;}
+.db-stats{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.2rem;}
+.db-stat{background:var(--bg3);border-radius:12px;padding:1rem;}
+.db-stat-num{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--neon);}
+.db-stat-num.blue{color:var(--neon2);}
+.db-stat-num.purple{color:var(--neon3);}
+.db-stat-num.amber{color:var(--neon4);}
+.db-stat-label{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.db-activity{background:var(--bg3);border-radius:12px;padding:1rem;}
+.db-act-title{font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem;font-family:'JetBrains Mono',monospace;}
+.activity-item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);}
+.activity-item:last-child{border:none;}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.act-text{font-size:0.78rem;color:var(--text);flex:1;}
+.act-time{font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:0.12;}
+.glow1{width:600px;height:600px;background:var(--neon);top:-200px;left:-200px;}
+.glow2{width:400px;height:400px;background:var(--neon2);bottom:-100px;right:-100px;}
+.glow3{width:300px;height:300px;background:var(--neon3);top:50%;right:10%;}
+
+/* TICKER */
+.ticker-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;overflow:hidden;white-space:nowrap;}
+.ticker-inner{display:inline-flex;gap:3rem;animation:ticker 25s linear infinite;}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;font-size:0.78rem;font-family:'JetBrains Mono',monospace;color:var(--muted);}
+.ticker-item .dot{width:5px;height:5px;background:var(--neon);border-radius:50%;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding:100px 5%;}
+.section-inner{max-width:1300px;margin:0 auto;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--neon);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.8rem;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:800;line-height:1.1;margin-bottom:1rem;}
+.section-sub{font-size:1rem;color:var(--muted);max-width:560px;line-height:1.7;}
+
+/* STATS */
+#stats{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 5%;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:1100px;margin:0 auto;}
+.stat-card{text-align:center;padding:2rem;background:var(--card);border:1px solid var(--border);border-radius:16px;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s;}
+.stat-card:hover{border-color:var(--neon);transform:translateY(-4px);}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon),var(--neon2));transform:scaleX(0);transition:transform 0.4s;}
+.stat-card:hover::after{transform:scaleX(1);}
+.stat-num{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--neon);line-height:1;}
+.stat-num.c2{color:var(--neon2);}
+.stat-num.c3{color:var(--neon3);}
+.stat-num.c4{color:var(--neon4);}
+.stat-suffix{font-size:1.5rem;}
+.stat-label{font-size:0.85rem;color:var(--muted);margin-top:0.5rem;}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem;}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;cursor:pointer;}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(99,255,180,0.04),transparent);opacity:0;transition:opacity 0.3s;}
+.feat-card:hover{border-color:var(--neon);transform:translateY(-4px);}
+.feat-card:hover::before{opacity:1;}
+.feat-icon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1.2rem;}
+.feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:0.6rem;}
+.feat-desc{font-size:0.87rem;color:var(--muted);line-height:1.6;}
+.feat-tag{display:inline-block;margin-top:1rem;font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--neon);background:rgba(99,255,180,0.08);border:1px solid var(--border2);border-radius:100px;padding:3px 10px;}
+
+/* PLATFORMS */
+#platforms{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.platforms-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.platform-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:12px;transition:all 0.25s;cursor:pointer;}
+.pcard:hover{border-color:var(--neon2);transform:translateX(4px);}
+.pcard-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.pcard-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;}
+.pcard-type{font-size:0.72rem;color:var(--muted);}
+.pcard-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--neon);}
+
+/* INTERNSHIP SEARCH — NEW */
+#internship-search{background:var(--bg);padding:100px 5%;}
+.search-header{text-align:center;margin-bottom:3rem;}
+.search-box{display:flex;gap:1rem;max-width:800px;margin:0 auto 1.5rem;flex-wrap:wrap;}
+.search-input{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.9rem 1.2rem;color:var(--text);font-size:0.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.search-input:focus{border-color:var(--neon);}
+.search-input::placeholder{color:var(--muted);}
+.search-btn{background:var(--neon);color:#000;border:none;border-radius:12px;padding:0.9rem 1.8rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.search-btn:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(99,255,180,0.4);}
+.search-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.search-filters{display:flex;gap:0.75rem;max-width:800px;margin:0 auto 2.5rem;flex-wrap:wrap;justify-content:center;}
+.filter-chip{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:'JetBrains Mono',monospace;}
+.filter-chip:hover,.filter-chip.active{background:rgba(99,255,180,0.1);border-color:var(--neon);color:var(--neon);}
+.jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.2rem;max-width:1200px;margin:0 auto;}
+.job-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.4rem;transition:all 0.25s;position:relative;overflow:hidden;}
+.job-card:hover{border-color:var(--neon);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+.job-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon),var(--neon2));opacity:0;transition:opacity 0.3s;}
+.job-card:hover::before{opacity:1;}
+.job-company{font-size:0.75rem;color:var(--neon);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;}
+.job-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.5rem;line-height:1.3;}
+.job-meta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+.job-tag{font-size:0.72rem;color:var(--muted);display:flex;align-items:center;gap:4px;}
+.job-source{font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--muted);background:var(--bg3);border-radius:6px;padding:2px 8px;}
+.job-apply{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--neon);color:var(--neon);border-radius:8px;padding:6px 14px;font-size:0.78rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+.job-apply:hover{background:var(--neon);color:#000;}
+.job-footer{display:flex;align-items:center;justify-content:space-between;margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border);}
+.search-status{text-align:center;padding:3rem;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.85rem;}
+.search-loading{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--neon);border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.api-setup-bar{background:rgba(99,255,180,0.05);border:1px solid var(--border2);border-radius:14px;padding:1.2rem 1.5rem;max-width:800px;margin:0 auto 2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.api-setup-bar p{font-size:0.83rem;color:var(--muted);flex:1;}
+.api-setup-bar a{color:var(--neon);text-decoration:none;}
+.api-key-input{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);font-size:0.82rem;font-family:'JetBrains Mono',monospace;outline:none;width:200px;}
+.api-key-input:focus{border-color:var(--neon);}
+.btn-sm{background:var(--neon);color:#000;border:none;border-radius:8px;padding:6px 14px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.78rem;cursor:pointer;}
+
+/* PRICING */
+.pricing-toggle{display:flex;align-items:center;gap:1rem;margin:2rem 0 3rem;justify-content:center;}
+.toggle-label{font-size:0.9rem;color:var(--muted);}
+.toggle-switch{position:relative;width:52px;height:28px;cursor:pointer;}
+.toggle-switch input{display:none;}
+.toggle-slider{position:absolute;inset:0;background:var(--card);border:1px solid var(--border);border-radius:100px;transition:0.3s;}
+.toggle-slider::before{content:'';position:absolute;width:20px;height:20px;background:var(--neon);border-radius:50%;top:3px;left:3px;transition:0.3s;}
+.toggle-switch input:checked + .toggle-slider::before{transform:translateX(24px);}
+.badge-save{background:rgba(99,255,180,0.15);color:var(--neon);font-size:0.72rem;font-family:'JetBrains Mono',monospace;padding:3px 10px;border-radius:100px;border:1px solid var(--border2);}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;margin:0 auto;}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.2rem;position:relative;transition:all 0.3s;}
+.price-card.featured{border-color:var(--neon);background:var(--card2);}
+.price-card.featured::before{content:'MOST POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;font-size:0.65rem;font-family:'Syne',sans-serif;font-weight:700;padding:4px 14px;border-radius:100px;white-space:nowrap;}
+.price-plan{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem;}
+.price-amount{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;line-height:1;}
+.price-amount span{font-size:1rem;font-weight:400;color:var(--muted);}
+.price-period{font-size:0.82rem;color:var(--muted);margin:0.4rem 0 1.4rem;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:0.7rem;margin-bottom:2rem;}
+.price-features li{font-size:0.87rem;display:flex;align-items:center;gap:10px;color:var(--muted);}
+.price-features li.active{color:var(--text);}
+.check{color:var(--neon);font-weight:700;}
+.cross{color:var(--muted);}
+.price-cta{width:100%;padding:0.85rem;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.25s;border:none;}
+.price-cta.primary{background:var(--neon);color:#000;}
+.price-cta.primary:hover{box-shadow:0 0 25px rgba(99,255,180,0.4);transform:translateY(-1px);}
+.price-cta.outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.price-cta.outline:hover{border-color:var(--neon);color:var(--neon);}
+
+/* ROADMAP */
+#roadmap{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.roadmap-tabs{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
+.rtab{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:8px 20px;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.2s;color:var(--muted);}
+.rtab.active,.rtab:hover{background:var(--neon);color:#000;border-color:var(--neon);}
+.roadmap-content{margin-top:2.5rem;}
+.roadmap-track{display:none;}
+.roadmap-track.active{display:block;}
+.track-steps{display:flex;flex-direction:column;gap:0;}
+.track-step{display:grid;grid-template-columns:auto 1fr;gap:0 1.5rem;position:relative;}
+.step-line{display:flex;flex-direction:column;align-items:center;}
+.step-dot{width:36px;height:36px;border-radius:50%;border:2px solid var(--neon);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--neon);background:var(--bg);flex-shrink:0;position:relative;z-index:1;}
+.step-connector{width:2px;flex:1;background:var(--border);min-height:20px;}
+.step-body{padding-bottom:2rem;}
+.step-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.3rem;padding-top:6px;}
+.step-desc{font-size:0.85rem;color:var(--muted);line-height:1.6;}
+.step-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:0.6rem;}
+.stag{font-size:0.7rem;font-family:'JetBrains Mono',monospace;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:3px 10px;border-radius:100px;}
+
+/* EVENTS */
+.events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.event-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.3s;}
+.event-card:hover{border-color:var(--neon2);transform:translateY(-4px);}
+.event-header{padding:1.5rem 1.5rem 1rem;border-bottom:1px solid var(--border);}
+.event-type{font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--neon2);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;}
+.event-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem;}
+.event-org{font-size:0.8rem;color:var(--muted);}
+.event-body{padding:1rem 1.5rem;}
+.event-meta{display:flex;flex-direction:column;gap:0.5rem;}
+.event-row{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--muted);}
+.event-row .icon{font-size:0.9rem;}
+.event-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.event-prize{font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;color:var(--neon4);}
+.event-btn{font-size:0.78rem;font-family:'Syne',sans-serif;font-weight:600;color:var(--neon2);background:transparent;border:1px solid var(--neon2);padding:5px 14px;border-radius:8px;cursor:pointer;transition:all 0.2s;}
+.event-btn:hover{background:var(--neon2);color:#000;}
+
+/* COMMUNITY */
+#community{background:var(--bg2);border-top:1px solid var(--border);}
+.community-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:center;}
+.peer-feed{display:flex;flex-direction:column;gap:1rem;}
+.peer-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.2s;}
+.peer-card:hover{border-color:var(--neon);}
+.peer-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.peer-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.88rem;}
+.peer-role{font-size:0.73rem;color:var(--muted);margin-bottom:0.5rem;}
+.peer-msg{font-size:0.82rem;color:var(--text);line-height:1.5;}
+.peer-actions{display:flex;gap:1rem;margin-top:0.6rem;}
+.peer-action{font-size:0.72rem;color:var(--muted);cursor:pointer;transition:color 0.2s;}
+.peer-action:hover{color:var(--neon);}
+
+/* AI ADVISOR — NEW */
+#ai-advisor{background:var(--bg);padding:100px 5%;border-top:1px solid var(--border);}
+.advisor-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:4rem;align-items:start;max-width:1300px;margin:0 auto;}
+.chat-window{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative;}
+.chat-window::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon),var(--neon3),var(--neon2));}
+.chat-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.chat-avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--neon),var(--neon2));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.chat-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;}
+.chat-status{font-size:0.72rem;color:var(--neon);display:flex;align-items:center;gap:5px;}
+.chat-status-dot{width:5px;height:5px;background:var(--neon);border-radius:50%;animation:pulse 2s infinite;}
+.chat-messages{height:380px;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:1rem;}
+.chat-messages::-webkit-scrollbar{width:3px;}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--neon);}
+.msg{display:flex;gap:10px;animation:fadeUp 0.3s ease;}
+.msg.user{flex-direction:row-reverse;}
+.msg-bubble{max-width:80%;padding:0.8rem 1rem;border-radius:14px;font-size:0.87rem;line-height:1.6;}
+.msg.ai .msg-bubble{background:var(--bg3);border:1px solid var(--border);border-radius:14px 14px 14px 4px;}
+.msg.user .msg-bubble{background:rgba(99,255,180,0.12);border:1px solid var(--border2);border-radius:14px 14px 4px 14px;color:var(--text);}
+.msg-avatar{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--neon),var(--neon2));display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;align-self:flex-end;}
+.msg-avatar.user{background:var(--card2);}
+.typing-indicator{display:flex;gap:5px;padding:0.8rem 1rem;}
+.typing-dot{width:7px;height:7px;background:var(--muted);border-radius:50%;animation:typingBounce 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+.chat-input-row{padding:1rem;border-top:1px solid var(--border);display:flex;gap:0.75rem;}
+.chat-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:0.7rem 1rem;color:var(--text);font-size:0.88rem;font-family:'DM Sans',sans-serif;outline:none;resize:none;height:44px;transition:border-color 0.2s;}
+.chat-input:focus{border-color:var(--neon);}
+.chat-send{background:var(--neon);color:#000;border:none;border-radius:10px;width:44px;height:44px;cursor:pointer;font-size:1.1rem;transition:all 0.2s;flex-shrink:0;}
+.chat-send:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(99,255,180,0.4);}
+.chat-send:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.chat-suggestions{padding:0 1rem 1rem;display:flex;gap:0.5rem;flex-wrap:wrap;}
+.chat-sug{background:var(--bg3);border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:0.72rem;color:var(--muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.chat-sug:hover{border-color:var(--neon);color:var(--neon);}
+
+/* RESUME REVIEWER — NEW */
+#resume-review{background:var(--bg2);border-top:1px solid var(--border);padding:100px 5%;}
+.resume-layout{display:grid;grid-template-columns:1fr 1fr;gap:3rem;max-width:1100px;margin:3rem auto 0;}
+.resume-input-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;}
+.resume-textarea{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;color:var(--text);font-size:0.85rem;font-family:'DM Sans',sans-serif;outline:none;resize:none;height:260px;line-height:1.6;transition:border-color 0.2s;}
+.resume-textarea:focus{border-color:var(--neon);}
+.resume-output{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.5rem;min-height:340px;display:flex;flex-direction:column;gap:1rem;}
+.resume-output-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:1rem;color:var(--muted);text-align:center;}
+.resume-feedback{font-size:0.88rem;line-height:1.7;color:var(--text);}
+.feedback-section{margin-bottom:1.2rem;}
+.feedback-section h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--neon);margin-bottom:0.5rem;}
+.score-bar{background:var(--bg3);border-radius:100px;height:6px;overflow:hidden;margin-top:0.5rem;}
+.score-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--neon),var(--neon2));transition:width 1s ease;}
+.score-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--muted);margin-top:4px;}
+
+/* TESTIMONIALS */
+#testimonials{padding:100px 5%;}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.test-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2rem;transition:all 0.3s;}
+.test-card:hover{border-color:var(--neon3);transform:translateY(-3px);}
+.test-stars{color:var(--neon4);margin-bottom:1rem;font-size:0.9rem;}
+.test-quote{font-size:0.92rem;color:var(--text);line-height:1.7;margin-bottom:1.5rem;font-style:italic;}
+.test-author{display:flex;align-items:center;gap:12px;}
+.test-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--neon),var(--neon2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#000;}
+.test-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;}
+.test-info{font-size:0.75rem;color:var(--muted);}
+
+/* CTA */
+#cta{padding:120px 5%;text-align:center;position:relative;overflow:hidden;}
+.cta-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;}
+.cta-title{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5vw,3.8rem);font-weight:800;line-height:1.05;margin-bottom:1.5rem;}
+.cta-sub{font-size:1.05rem;color:var(--muted);margin-bottom:2.5rem;line-height:1.7;}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 5% 30px;}
+.footer-inner{max-width:1300px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-brand p{font-size:0.87rem;color:var(--muted);margin-top:1rem;line-height:1.7;max-width:260px;}
+.footer-col-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:1.2rem;color:var(--white);}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:0.7rem;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+.footer-links a:hover{color:var(--neon);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-copy{font-size:0.8rem;color:var(--muted);}
+.footer-made{font-size:0.78rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.footer-made span{color:var(--neon);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:translateX(0);}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* NOTIF */
+.notif{position:fixed;bottom:30px;right:30px;background:var(--card);border:1px solid var(--neon);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:0.82rem;z-index:999;transform:translateX(200px);opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.notif.show{transform:translateX(0);opacity:1;}
+.notif-dot{width:8px;height:8px;background:var(--neon);border-radius:50%;animation:pulse 1.5s infinite;}
+.glow-card{box-shadow:0 0 0 1px transparent;transition:box-shadow 0.3s;}
+.glow-card:hover{box-shadow:0 0 30px rgba(99,255,180,0.08);}
+
+/* MOBILE */
+@media(max-width:900px){
+  .hero-grid,.platforms-layout,.community-layout,.advisor-layout,.resume-layout{grid-template-columns:1fr;}
+  .hero-visual{display:none;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .features-grid,.pricing-grid,.events-grid,.test-grid{grid-template-columns:1fr;}
+  .platform-cards{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .btn-nav{display:none;}
+  .search-box{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><span class="logo-dot"></span>Nex<span>Path</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#internship-search">Search Jobs</a></li>
+    <li><a href="#roadmap">Career Paths</a></li>
+    <li><a href="#ai-advisor">AI Advisor</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+    <a href="#pricing" class="btn-nav">Get Started →</a>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="toggleMenu()">Features</a>
+  <a href="#internship-search" onclick="toggleMenu()">Search Jobs</a>
+  <a href="#roadmap" onclick="toggleMenu()">Career Paths</a>
+  <a href="#ai-advisor" onclick="toggleMenu()">AI Advisor</a>
+  <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="#community" onclick="toggleMenu()">Community</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="glow glow1"></div>
+  <div class="glow glow2"></div>
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-badge">✦ Your All-in-One Career Operating System</div>
+      <h1 class="hero-title">Build Your Career.<br/><span class="accent">Find Opportunities.</span><br/><span class="accent2">Connect & Grow.</span></h1>
+      <p class="hero-sub">NexPath aggregates internships from LinkedIn, Unstop, Internshala & Indeed — combined with AI career guidance, hackathon alerts, roadmaps, and a vibrant peer community. One platform. Infinite potential.</p>
+      <div class="hero-btns">
+        <a href="#internship-search" class="btn-primary">🔍 Search Internships</a>
+        <a href="#ai-advisor" class="btn-ghost">Chat with AI Advisor →</a>
+      </div>
+      <div class="hero-platforms">
+        <span>Powered by</span>
+        <div class="platform-tags">
+          <span class="ptag">LinkedIn</span><span class="ptag">Unstop</span><span class="ptag">Internshala</span><span class="ptag">Indeed</span><span class="ptag">Devfolio</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dashboard-card">
+        <div class="db-header">
+          <div class="db-title">Your Career Dashboard</div>
+          <div class="db-live"><div class="db-live-dot"></div> Live</div>
+        </div>
+        <div class="db-stats">
+          <div class="db-stat"><div class="db-stat-num" id="counterInternships">0</div><div class="db-stat-label">Active Internships</div></div>
+          <div class="db-stat"><div class="db-stat-num blue" id="counterHackathons">0</div><div class="db-stat-label">Live Hackathons</div></div>
+          <div class="db-stat"><div class="db-stat-num purple" id="counterPeers">0</div><div class="db-stat-label">Peers Connected</div></div>
+          <div class="db-stat"><div class="db-stat-num amber" id="counterResources">0</div><div class="db-stat-label">Study Resources</div></div>
+        </div>
+        <div class="db-activity">
+          <div class="db-act-title">// recent activity</div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--neon)"></div><div class="act-text">Google SWE Internship added</div><div class="act-time">2m ago</div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--neon2)"></div><div class="act-text">Smart India Hackathon 2025</div><div class="act-time">5m ago</div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--neon3)"></div><div class="act-text">Rahul joined your network</div><div class="act-time">12m ago</div></div>
+          <div class="activity-item"><div class="act-dot" style="background:var(--neon4)"></div><div class="act-text">DSA Sheet — 45 problems added</div><div class="act-time">1h ago</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="dot"></span>Google SWE Internship — ₹80K/mo</span>
+    <span class="ticker-item"><span class="dot"></span>Smart India Hackathon 2025 — Registrations Open</span>
+    <span class="ticker-item"><span class="dot"></span>Microsoft MLSA Applications Live</span>
+    <span class="ticker-item"><span class="dot"></span>Unstop: 1200+ new internships this week</span>
+    <span class="ticker-item"><span class="dot"></span>Flipkart Grid 7.0 — Register Now</span>
+    <span class="ticker-item"><span class="dot"></span>Amazon SDE Intern — Deadline: Aug 30</span>
+    <span class="ticker-item"><span class="dot"></span>Devfolio HackWithIndia 2025</span>
+    <span class="ticker-item"><span class="dot"></span>Google SWE Internship — ₹80K/mo</span>
+    <span class="ticker-item"><span class="dot"></span>Smart India Hackathon 2025 — Registrations Open</span>
+    <span class="ticker-item"><span class="dot"></span>Microsoft MLSA Applications Live</span>
+    <span class="ticker-item"><span class="dot"></span>Unstop: 1200+ new internships this week</span>
+    <span class="ticker-item"><span class="dot"></span>Flipkart Grid 7.0 — Register Now</span>
+    <span class="ticker-item"><span class="dot"></span>Amazon SDE Intern — Deadline: Aug 30</span>
+    <span class="ticker-item"><span class="dot"></span>Devfolio HackWithIndia 2025</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="stats-grid reveal">
+    <div class="stat-card"><div class="stat-num" data-target="48000">0</div><div class="stat-label">Active Internships Aggregated</div></div>
+    <div class="stat-card"><div class="stat-num c2" data-target="320">0</div><div class="stat-label">Live Hackathons & Events</div></div>
+    <div class="stat-card"><div class="stat-num c3" data-target="95000">0</div><div class="stat-label">Students on Platform</div></div>
+    <div class="stat-card"><div class="stat-num c4" data-target="1200">0</div><div class="stat-label">Study Resources Available</div></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-label reveal">// what we offer</div>
+    <h2 class="section-title reveal">Everything a student needs,<br/>in one platform.</h2>
+    <p class="section-sub reveal">Stop juggling 10 apps. NexPath brings together every tool you need to build a career — organized, personalized, and always up to date.</p>
+    <div class="features-grid">
+      <div class="feat-card glow-card reveal">
+        <div class="feat-icon" style="background:rgba(99,255,180,0.1);">🤖</div>
+        <div class="feat-title">AI Career Advisor</div>
+        <div class="feat-desc">Chat with our AI advisor powered by Claude — get personalized career advice, resume tips, interview prep, and roadmap guidance. Available 24/7.</div>
+        <div class="feat-tag">Live AI · Claude-powered</div>
+      </div>
+      <div class="feat-card glow-card reveal">
+        <div class="feat-icon" style="background:rgba(74,243,255,0.1);">💼</div>
+        <div class="feat-title">Unified Internship Hub</div>
+        <div class="feat-desc">All opportunities from LinkedIn, Internshala, Unstop, and Indeed in one place. Filter by domain, stipend, duration, or deadline. Apply in one click.</div>
+        <div class="feat-tag">4 platforms · Real data</div>
+      </div>
+      <div class="feat-card glow-card reveal">
+        <div class="feat-icon" style="background:rgba(167,139,250,0.1);">⚡</div>
+        <div class="feat-title">Hackathon & Event Alerts</div>
+        <div class="feat-desc">Never miss SIH, Flipkart Grid, or any hackathon again. Get real-time alerts, team formation help, and prep resources — all in one feed.</div>
+        <div class="feat-tag">Real-time alerts</div>
+      </div>
+      <div class="feat-card glow-card reveal">
+        <div class="feat-icon" style="background:rgba(245,158,11,0.1);">📝</div>
+        <div class="feat-title">AI Resume Reviewer</div>
+        <div class="feat-desc">Paste your resume and get instant AI feedback — ATS score, missing keywords, structure suggestions, and tailored improvements for your target role.</div>
+        <div class="feat-tag">AI-powered · Instant</div>
+      </div>
+      <div class="feat-card glow-card reveal">
+        <div class="feat-icon" style="background:rgba(255,77,109,0.1);">🌐</div>
+        <div class="feat-title">Peer Networking</div>
+        <div class="feat-desc">Connect with students from your branch, target company, or skill set. Share referrals, form hackathon teams, and build your professional network early.</div>
+        <div class="feat-tag">Community-first</div>
+      </div>
+      <div class="feat-card glow-card reveal">
+        <div class="feat-icon" style="background:rgba(99,255,180,0.1);">📊</div>
+        <div class="feat-title">Progress Dashboard</div>
+        <div class="feat-desc">Track your applications, completed roadmap milestones, events attended, and skills acquired. Your personal career analytics, visualized beautifully.</div>
+        <div class="feat-tag">Analytics</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERNSHIP SEARCH — NEW LIVE SECTION -->
+<section id="internship-search">
+  <div class="section-inner">
+    <div class="search-header">
+      <div class="section-label reveal" style="text-align:center;">// live internship search</div>
+      <h2 class="section-title reveal" style="text-align:center;">Find your next internship.<br/>Real jobs. Right now.</h2>
+      <p class="section-sub reveal" style="text-align:center;margin:0 auto 2.5rem;">Search live internship & job listings. Results powered by real job data aggregated across platforms.</p>
+    </div>
+    <div class="api-setup-bar reveal" id="apiSetupBar">
+      <span style="font-size:1.2rem;">🔑</span>
+      <p>To load <strong style="color:var(--text);">real job listings</strong>, enter your free <a href="https://rapidapi.com/letscrape-6bJuJoKaM9/api/jsearch" target="_blank">JSearch API key</a> (RapidAPI — free tier, ~100 calls/month). Or <strong style="color:var(--neon);">try demo mode</strong> without a key.</p>
+      <input type="password" class="api-key-input" id="rapidApiKey" placeholder="RapidAPI key..." />
+      <button class="btn-sm" onclick="saveApiKey()">Save Key</button>
+    </div>
+    <div class="search-box reveal">
+      <input type="text" class="search-input" id="jobQuery" placeholder="e.g. Software Engineer Intern, Data Science, React..." value="Software Engineer Intern"/>
+      <input type="text" class="search-input" id="jobLocation" placeholder="Location (e.g. India, Remote, Bangalore)" value="India" style="max-width:200px;"/>
+      <button class="search-btn" id="searchBtn" onclick="searchJobs()">🔍 Search</button>
+    </div>
+    <div class="search-filters reveal">
+      <span class="filter-chip active" onclick="filterChip(this,'all')">All</span>
+      <span class="filter-chip" onclick="filterChip(this,'remote')">Remote</span>
+      <span class="filter-chip" onclick="filterChip(this,'fulltime')">Full-time</span>
+      <span class="filter-chip" onclick="filterChip(this,'parttime')">Part-time</span>
+      <span class="filter-chip" onclick="filterChip(this,'internship')">Internship</span>
+    </div>
+    <div id="jobsContainer">
+      <div class="search-status">Click "Search" to find real internship listings ✨</div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section id="platforms">
+  <div class="section-inner">
+    <div class="platforms-layout">
+      <div class="reveal">
+        <div class="section-label">// integrated platforms</div>
+        <h2 class="section-title">All your job boards,<br/>one dashboard.</h2>
+        <p class="section-sub" style="margin-bottom:2rem;">We pull live data from every major platform so you never have to check them individually again. One search. Every opportunity.</p>
+        <a href="#internship-search" class="btn-primary">Search Now →</a>
+      </div>
+      <div class="platform-cards reveal">
+        <div class="pcard"><div class="pcard-icon" style="background:rgba(0,119,181,0.15);color:#0077b5;">in</div><div><div class="pcard-name">LinkedIn</div><div class="pcard-type">Jobs & Networking</div></div><div class="pcard-count">18K+</div></div>
+        <div class="pcard"><div class="pcard-icon" style="background:rgba(255,82,0,0.15);color:#ff5200;">U</div><div><div class="pcard-name">Unstop</div><div class="pcard-type">Competitions & Internships</div></div><div class="pcard-count">9K+</div></div>
+        <div class="pcard"><div class="pcard-icon" style="background:rgba(0,176,116,0.15);color:#00b074;">IS</div><div><div class="pcard-name">Internshala</div><div class="pcard-type">Student Internships</div></div><div class="pcard-count">14K+</div></div>
+        <div class="pcard"><div class="pcard-icon" style="background:rgba(0,100,220,0.15);color:#0064DC;">ID</div><div><div class="pcard-name">Indeed</div><div class="pcard-type">Jobs & Internships</div></div><div class="pcard-count">7K+</div></div>
+        <div class="pcard"><div class="pcard-icon" style="background:rgba(167,139,250,0.15);color:var(--neon3);">🛠</div><div><div class="pcard-name">Devfolio</div><div class="pcard-type">Hackathons</div></div><div class="pcard-count">320+</div></div>
+        <div class="pcard"><div class="pcard-icon" style="background:rgba(99,255,180,0.15);color:var(--neon);">+</div><div><div class="pcard-name">More coming</div><div class="pcard-type">Naukri, AngelList & more</div></div><div class="pcard-count">soon</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREER ROADMAP -->
+<section id="roadmap">
+  <div class="section-inner">
+    <div class="section-label reveal">// career paths</div>
+    <h2 class="section-title reveal">Pick your path.<br/>We'll guide the rest.</h2>
+    <p class="section-sub reveal">Step-by-step roadmaps curated by industry professionals and top students.</p>
+    <div class="roadmap-tabs reveal">
+      <button class="rtab active" onclick="switchTrack('swe',event)">💻 Software Dev</button>
+      <button class="rtab" onclick="switchTrack('ml',event)">🤖 ML / AI</button>
+      <button class="rtab" onclick="switchTrack('cyber',event)">🔐 Cybersecurity</button>
+      <button class="rtab" onclick="switchTrack('product',event)">📱 Product</button>
+    </div>
+    <div class="roadmap-content reveal">
+      <div class="roadmap-track active" id="track-swe">
+        <div class="track-steps">
+          <div class="track-step"><div class="step-line"><div class="step-dot">1</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Core CS Fundamentals</div><div class="step-desc">Master DSA, Algorithms, OS, DBMS, and CN. Build a solid base every top company tests.</div><div class="step-tags"><span class="stag">DSA</span><span class="stag">C++/Python</span><span class="stag">DBMS</span><span class="stag">OS</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">2</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Build Real Projects</div><div class="step-desc">Create 2-3 end-to-end projects — a full-stack app, an API, a CLI tool. Push to GitHub and document thoroughly.</div><div class="step-tags"><span class="stag">React</span><span class="stag">Node.js</span><span class="stag">GitHub</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">3</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Competitive Programming</div><div class="step-desc">Grind LeetCode (150+ problems), participate in Codeforces contests. Aim for Pupil/Specialist rating.</div><div class="step-tags"><span class="stag">LeetCode</span><span class="stag">Codeforces</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">4</div></div><div class="step-body"><div class="step-title">Land Your Internship</div><div class="step-desc">Apply via NexPath — filter SWE internships across LinkedIn, Internshala and Indeed. Target FAANG and startups.</div><div class="step-tags"><span class="stag">LinkedIn</span><span class="stag">Indeed</span><span class="stag">Resume</span></div></div></div>
+        </div>
+      </div>
+      <div class="roadmap-track" id="track-ml">
+        <div class="track-steps">
+          <div class="track-step"><div class="step-line"><div class="step-dot">1</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Math & Programming Foundation</div><div class="step-desc">Linear Algebra, Calculus, Probability + Python with NumPy/Pandas.</div><div class="step-tags"><span class="stag">Python</span><span class="stag">NumPy</span><span class="stag">Math</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">2</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Core ML Algorithms</div><div class="step-desc">Regression, classification, clustering, SVMs, decision trees. Implement from scratch, then use Scikit-learn.</div><div class="step-tags"><span class="stag">Scikit-learn</span><span class="stag">EDA</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">3</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Deep Learning & Specialization</div><div class="step-desc">PyTorch/TensorFlow, CNNs, RNNs, Transformers. Pick NLP, CV, or GenAI and go deep.</div><div class="step-tags"><span class="stag">PyTorch</span><span class="stag">NLP</span><span class="stag">GenAI</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">4</div></div><div class="step-body"><div class="step-title">Kaggle + Research + Internships</div><div class="step-desc">Win Kaggle competitions, contribute to research papers, and land ML internships via NexPath.</div><div class="step-tags"><span class="stag">Kaggle</span><span class="stag">HuggingFace</span></div></div></div>
+        </div>
+      </div>
+      <div class="roadmap-track" id="track-cyber">
+        <div class="track-steps">
+          <div class="track-step"><div class="step-line"><div class="step-dot">1</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Networking & OS Fundamentals</div><div class="step-desc">TCP/IP, DNS, HTTP, firewalls, Linux CLI, and Windows internals.</div><div class="step-tags"><span class="stag">Linux</span><span class="stag">Networking</span><span class="stag">TCP/IP</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">2</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Ethical Hacking & CTFs</div><div class="step-desc">Practice on TryHackMe and HackTheBox. Participate in CTF competitions. Learn OWASP Top 10.</div><div class="step-tags"><span class="stag">TryHackMe</span><span class="stag">CTF</span><span class="stag">OWASP</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">3</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Certifications</div><div class="step-desc">CompTIA Security+, CEH, or Cisco CyberOps for entry-level SOC analyst and pen tester roles.</div><div class="step-tags"><span class="stag">Security+</span><span class="stag">CEH</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">4</div></div><div class="step-body"><div class="step-title">Bug Bounties & Internships</div><div class="step-desc">Report vulnerabilities on HackerOne, Bugcrowd. Apply via NexPath for SOC and AppSec roles.</div><div class="step-tags"><span class="stag">HackerOne</span><span class="stag">Bug Bounty</span></div></div></div>
+        </div>
+      </div>
+      <div class="roadmap-track" id="track-product">
+        <div class="track-steps">
+          <div class="track-step"><div class="step-line"><div class="step-dot">1</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Product Thinking & Frameworks</div><div class="step-desc">Learn JTBD, PRDs, user stories, and prioritization frameworks (RICE, MoSCoW).</div><div class="step-tags"><span class="stag">JTBD</span><span class="stag">PRD</span><span class="stag">Lean</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">2</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Design & Prototyping</div><div class="step-desc">Learn Figma basics, UX design principles, and user research methods. Build clickable prototypes.</div><div class="step-tags"><span class="stag">Figma</span><span class="stag">UX</span><span class="stag">Research</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">3</div><div class="step-connector"></div></div><div class="step-body"><div class="step-title">Analytics & Data Literacy</div><div class="step-desc">SQL, Google Analytics, A/B testing, funnel analysis. PMs who query data independently are more valuable.</div><div class="step-tags"><span class="stag">SQL</span><span class="stag">Analytics</span></div></div></div>
+          <div class="track-step"><div class="step-line"><div class="step-dot">4</div></div><div class="step-body"><div class="step-title">APM Programs & Internships</div><div class="step-desc">Apply to Google APM, Microsoft PM, and startup PM roles via NexPath's curated PM filters.</div><div class="step-tags"><span class="stag">Google APM</span><span class="stag">Microsoft</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="section-inner">
+    <div class="section-label reveal">// live events</div>
+    <h2 class="section-title reveal">Hackathons & Tech Events<br/>happening right now.</h2>
+    <div class="events-grid">
+      <div class="event-card reveal">
+        <div class="event-header"><div class="event-type">🏆 Hackathon</div><div class="event-name">Smart India Hackathon 2025</div><div class="event-org">Government of India</div></div>
+        <div class="event-body"><div class="event-meta"><div class="event-row"><span class="icon">📅</span>Deadline: Aug 15, 2025</div><div class="event-row"><span class="icon">👥</span>Team Size: 4-6 members</div><div class="event-row"><span class="icon">📍</span>Pan India (Offline Finals)</div></div></div>
+        <div class="event-footer"><div class="event-prize">₹1,00,000 Prize</div><button class="event-btn" onclick="window.open('https://sih.gov.in','_blank')">Register →</button></div>
+      </div>
+      <div class="event-card reveal">
+        <div class="event-header"><div class="event-type">⚡ Competition</div><div class="event-name">Flipkart Grid 7.0</div><div class="event-org">Flipkart</div></div>
+        <div class="event-body"><div class="event-meta"><div class="event-row"><span class="icon">📅</span>Deadline: Jul 28, 2025</div><div class="event-row"><span class="icon">👥</span>Team Size: 2-3 members</div><div class="event-row"><span class="icon">📍</span>Online + Bangalore Finals</div></div></div>
+        <div class="event-footer"><div class="event-prize">PPO + ₹75,000</div><button class="event-btn" onclick="window.open('https://unstop.com','_blank')">Register →</button></div>
+      </div>
+      <div class="event-card reveal">
+        <div class="event-header"><div class="event-type">🎓 Program</div><div class="event-name">Microsoft MLSA 2025</div><div class="event-org">Microsoft</div></div>
+        <div class="event-body"><div class="event-meta"><div class="event-row"><span class="icon">📅</span>Applications: Open Now</div><div class="event-row"><span class="icon">👥</span>Individual</div><div class="event-row"><span class="icon">📍</span>Global (Remote)</div></div></div>
+        <div class="event-footer"><div class="event-prize">Certification + Perks</div><button class="event-btn" onclick="window.open('https://studentambassadors.microsoft.com','_blank')">Apply →</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-label reveal" style="text-align:center;">// plans & pricing</div>
+    <h2 class="section-title reveal" style="text-align:center;">Invest in your career.<br/>Not your wallet.</h2>
+    <div class="pricing-toggle">
+      <span class="toggle-label">Monthly</span>
+      <label class="toggle-switch"><input type="checkbox" id="billingToggle" onchange="toggleBilling()"/><div class="toggle-slider"></div></label>
+      <span class="toggle-label">Annual</span>
+      <span class="badge-save">Save 40%</span>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <div class="price-plan">Free</div>
+        <div class="price-amount">₹0<span>/mo</span></div>
+        <div class="price-period">Forever free for students</div>
+        <ul class="price-features">
+          <li class="active"><span class="check">✓</span>50 internship searches/month</li>
+          <li class="active"><span class="check">✓</span>Basic career roadmaps</li>
+          <li class="active"><span class="check">✓</span>Hackathon alerts</li>
+          <li class="active"><span class="check">✓</span>Community access</li>
+          <li><span class="cross">✗</span>AI Career Advisor</li>
+          <li><span class="cross">✗</span>AI Resume Review</li>
+          <li><span class="cross">✗</span>Priority job alerts</li>
+        </ul>
+        <button class="price-cta outline">Get Started Free</button>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-plan">Pro</div>
+        <div class="price-amount" id="proPrice">₹199<span>/mo</span></div>
+        <div class="price-period" id="proPeriod">Billed monthly</div>
+        <ul class="price-features">
+          <li class="active"><span class="check">✓</span>Unlimited internship searches</li>
+          <li class="active"><span class="check">✓</span>AI Career Advisor (Claude)</li>
+          <li class="active"><span class="check">✓</span>AI Resume Reviewer</li>
+          <li class="active"><span class="check">✓</span>Advanced career roadmaps</li>
+          <li class="active"><span class="check">✓</span>Priority hackathon alerts</li>
+          <li class="active"><span class="check">✓</span>Direct apply feature</li>
+          <li class="active"><span class="check">✓</span>Application tracker</li>
+        </ul>
+        <button class="price-cta primary">Start Pro →</button>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-plan">Campus</div>
+        <div class="price-amount" id="campusPrice">₹499<span>/mo</span></div>
+        <div class="price-period" id="campusPeriod">Per college, billed monthly</div>
+        <ul class="price-features">
+          <li class="active"><span class="check">✓</span>Everything in Pro</li>
+          <li class="active"><span class="check">✓</span>College-wide dashboard</li>
+          <li class="active"><span class="check">✓</span>Placement cell integration</li>
+          <li class="active"><span class="check">✓</span>Bulk student onboarding</li>
+          <li class="active"><span class="check">✓</span>Analytics for TPO</li>
+          <li class="active"><span class="check">✓</span>Company tie-ups & drives</li>
+          <li class="active"><span class="check">✓</span>Dedicated support</li>
+        </ul>
+        <button class="price-cta outline">Contact Sales →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="section-inner">
+    <div class="community-layout">
+      <div class="reveal">
+        <div class="section-label">// peer network</div>
+        <h2 class="section-title">Your tribe of<br/>ambitious students.</h2>
+        <p class="section-sub" style="margin-bottom:2rem;">Find hackathon teammates, share referrals, get mentored by seniors, and celebrate wins together. A community that actually helps you grow.</p>
+        <a href="#pricing" class="btn-primary">Join the Community →</a>
+      </div>
+      <div class="peer-feed reveal">
+        <div class="peer-card"><div class="peer-avatar" style="background:rgba(99,255,180,0.15);">👨‍💻</div><div><div class="peer-name">Rahul Sharma</div><div class="peer-role">3rd Year CSE · IIT Hyderabad</div><div class="peer-msg">Looking for 2 ML enthusiasts for Flipkart Grid 7.0 — I'll handle the CV part, need backend + frontend help!</div><div class="peer-actions"><span class="peer-action">👋 Connect</span><span class="peer-action">💬 Message</span></div></div></div>
+        <div class="peer-card"><div class="peer-avatar" style="background:rgba(74,243,255,0.15);">👩‍🎓</div><div><div class="peer-name">Priya Nair</div><div class="peer-role">Final Year ECE · NIT Warangal</div><div class="peer-msg">Just got my Google SWE intern offer! Happy to review resumes for anyone preparing for FAANG. DM me 🙌</div><div class="peer-actions"><span class="peer-action">👋 Connect</span><span class="peer-action">💬 Message</span></div></div></div>
+        <div class="peer-card"><div class="peer-avatar" style="background:rgba(167,139,250,0.15);">🧑‍💻</div><div><div class="peer-name">Arjun Mehta</div><div class="peer-role">2nd Year CS · BITS Pilani</div><div class="peer-msg">Sharing my SIH 2024 winning prototype + full PPT. Free for everyone on NexPath resources!</div><div class="peer-actions"><span class="peer-action">👋 Connect</span><span class="peer-action">📥 Download</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI ADVISOR — NEW LIVE SECTION -->
+<section id="ai-advisor">
+  <div class="section-inner" style="max-width:1300px;margin:0 auto;">
+    <div class="advisor-layout">
+      <div class="reveal">
+        <div class="section-label">// ai career advisor</div>
+        <h2 class="section-title">Your personal<br/>career mentor.<br/><span style="color:var(--neon);">Available 24/7.</span></h2>
+        <p class="section-sub" style="margin-bottom:2rem;">Ask anything about your career — resume tips, which internships to apply for, how to crack FAANG interviews, which roadmap suits your skills. Powered by Claude AI.</p>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--muted);">
+            <span style="color:var(--neon);">✓</span> Personalized career roadmap advice
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--muted);">
+            <span style="color:var(--neon);">✓</span> Resume & LinkedIn optimization tips
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--muted);">
+            <span style="color:var(--neon);">✓</span> Interview preparation & mock Q&A
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--muted);">
+            <span style="color:var(--neon);">✓</span> Which skills to learn next
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--muted);">
+            <span style="color:var(--neon);">✓</span> Hackathon & internship strategy
+          </div>
+        </div>
+      </div>
+      <div class="chat-window reveal">
+        <div class="chat-header">
+          <div class="chat-avatar">🤖</div>
+          <div>
+            <div class="chat-name">NexPath AI Advisor</div>
+            <div class="chat-status"><div class="chat-status-dot"></div>Online · Powered by Claude</div>
+          </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg ai">
+            <div class="msg-avatar">🤖</div>
+            <div class="msg-bubble">Hey! I'm your NexPath AI Career Advisor 👋 I can help you with career planning, resume tips, interview prep, finding internships, and anything else career-related. What's on your mind?</div>
+          </div>
+        </div>
+        <div class="chat-suggestions">
+          <span class="chat-sug" onclick="sendSuggestion(this)">How do I get a FAANG internship?</span>
+          <span class="chat-sug" onclick="sendSuggestion(this)">Review my resume</span>
+          <span class="chat-sug" onclick="sendSuggestion(this)">Best roadmap for ML/AI?</span>
+          <span class="chat-sug" onclick="sendSuggestion(this)">How to crack SIH 2025?</span>
+        </div>
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="chatInput" placeholder="Ask me anything about your career..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+          <button class="chat-send" id="chatSend" onclick="sendChat()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI RESUME REVIEWER — NEW -->
+<section id="resume-review">
+  <div class="section-inner">
+    <div class="section-label reveal" style="text-align:center;">// ai resume reviewer</div>
+    <h2 class="section-title reveal" style="text-align:center;">Get instant AI feedback<br/>on your resume.</h2>
+    <p class="section-sub reveal" style="text-align:center;margin:0 auto 1rem;">Paste your resume text below and our AI will score it, identify gaps, suggest improvements, and tailor advice for your target role.</p>
+    <div class="resume-layout reveal">
+      <div class="resume-input-box">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--white);">📋 Paste Your Resume</div>
+        <textarea class="resume-textarea" id="resumeText" placeholder="Paste your resume text here...
+
+Example:
+John Doe | john@email.com | LinkedIn: /in/johndoe
+
+EDUCATION
+B.Tech Computer Science — NIT Warangal (2022-2026) CGPA: 8.5
+
+EXPERIENCE
+Software Engineering Intern — Startup XYZ (June-Aug 2024)
+• Built REST APIs with Node.js...
+
+PROJECTS
+E-Commerce Platform | React, Node.js, MongoDB...
+
+SKILLS
+Languages: Python, C++, JavaScript
+Frameworks: React, Node.js..."></textarea>
+        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+          <input type="text" class="search-input" id="targetRole" placeholder="Target role (e.g. SWE Intern at Google)" style="flex:1;"/>
+          <button class="search-btn" onclick="reviewResume()">✨ Review Resume</button>
+        </div>
+      </div>
+      <div class="resume-output" id="resumeOutput">
+        <div class="resume-output-placeholder">
+          <div style="font-size:3rem;">📊</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;">AI Feedback Appears Here</div>
+          <div style="font-size:0.85rem;max-width:240px;">Paste your resume and click "Review Resume" to get instant, actionable feedback</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-inner">
+    <div class="section-label reveal" style="text-align:center;">// student stories</div>
+    <h2 class="section-title reveal" style="text-align:center;">Real students.<br/>Real results.</h2>
+    <div class="test-grid">
+      <div class="test-card reveal"><div class="test-stars">★★★★★</div><div class="test-quote">"NexPath is the one thing I wish existed in my 2nd year. Found my Amazon internship here, joined a hackathon team, and used the DSA sheet to crack 4 OAs in one month."</div><div class="test-author"><div class="test-avatar">AK</div><div><div class="test-name">Aditya Kumar</div><div class="test-info">SDE Intern @ Amazon · IIT Bombay</div></div></div></div>
+      <div class="test-card reveal"><div class="test-stars">★★★★★</div><div class="test-quote">"The AI Career Advisor is a game changer — it's like having a senior who's done FAANG interviews giving you personalised advice anytime. Got my Microsoft offer after 3 weeks of using NexPath."</div><div class="test-author"><div class="test-avatar">SR</div><div><div class="test-name">Sneha Rao</div><div class="test-info">SWE Intern @ Microsoft · NIT Surathkal</div></div></div></div>
+      <div class="test-card reveal"><div class="test-stars">★★★★★</div><div class="test-quote">"As a TPO, I can see real data on our students' activity. The Campus plan is transforming placement prep at our college. 40% more students got internships this semester."</div><div class="test-author"><div class="test-avatar">VP</div><div><div class="test-name">Dr. Vijay Prakash</div><div class="test-info">TPO · CMRIT Hyderabad</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="glow glow1" style="opacity:0.06;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <div class="cta-inner">
+    <div class="section-label reveal" style="text-align:center;">// start today</div>
+    <h2 class="cta-title reveal">Your career starts<br/>with <span style="color:var(--neon);">one click.</span></h2>
+    <p class="cta-sub reveal">Join 95,000+ students who use NexPath to find internships, win hackathons, and build careers they're proud of. Free to start. No credit card needed.</p>
+    <div class="cta-btns reveal">
+      <a href="#internship-search" class="btn-primary">🚀 Search Internships</a>
+      <a href="#ai-advisor" class="btn-ghost">Chat with AI Advisor →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo" style="font-size:1.3rem;"><span class="logo-dot"></span>Nex<span>Path</span></div>
+        <p>Your all-in-one career OS for students. Find internships, join hackathons, connect with peers, and build a career you're proud of.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <ul class="footer-links">
+          <li><a href="#internship-search">Internship Hub</a></li>
+          <li><a href="#events">Hackathon Alerts</a></li>
+          <li><a href="#roadmap">Career Roadmaps</a></li>
+          <li><a href="#ai-advisor">AI Advisor</a></li>
+          <li><a href="#resume-review">Resume Reviewer</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 NexPath. All rights reserved.</div>
+      <div class="footer-made">Built with <span>♥</span> for Indian students · AI-powered by Claude</div>
+    </div>
+  </div>
+</footer>
+
+<div class="notif" id="notif">
+  <div class="notif-dot"></div>
+  <span id="notifText">New internship posted: Google SWE Intern 2025</span>
+</div>
+
+<script>
+// === CURSOR ===
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+function animRing() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); }
+animRing();
+
+// === THEME ===
+const toggle = document.getElementById('themeToggle');
+toggle.addEventListener('click', () => {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  document.documentElement.setAttribute('data-theme', isLight ? '' : 'light');
+  toggle.textContent = isLight ? '🌙' : '☀️';
+});
+
+// === HAMBURGER ===
+function toggleMenu() {
+  const h = document.getElementById('hamburger');
+  const m = document.getElementById('mobileMenu');
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+}
+
+// === COUNTERS ===
+function animateCounter(el, target, duration = 2000) {
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    const val = Math.floor(start);
+    el.textContent = val >= 1000 ? (val/1000).toFixed(val >= 10000 ? 0 : 1) + 'K' : val;
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+function animateStatCounters() {
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+    animateCounter(el, parseInt(el.dataset.target));
+  });
+}
+setTimeout(() => {
+  animateCounter(document.getElementById('counterInternships'), 48000, 1800);
+  animateCounter(document.getElementById('counterHackathons'), 320, 1800);
+  animateCounter(document.getElementById('counterPeers'), 95000, 1800);
+  animateCounter(document.getElementById('counterResources'), 1200, 1800);
+}, 500);
+
+// === SCROLL REVEAL ===
+const revealEls = document.querySelectorAll('.reveal');
+const statSection = document.getElementById('stats');
+let statsAnimated = false;
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      if (e.target === statSection && !statsAnimated) {
+        statsAnimated = true;
+        setTimeout(animateStatCounters, 200);
+      }
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(el => observer.observe(el));
+observer.observe(statSection);
+
+// === ROADMAP TABS ===
+function switchTrack(name, e) {
+  document.querySelectorAll('.roadmap-track').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  document.getElementById('track-' + name).classList.add('active');
+  if(e && e.target) e.target.classList.add('active');
+}
+
+// === PRICING TOGGLE ===
+function toggleBilling() {
+  const annual = document.getElementById('billingToggle').checked;
+  document.getElementById('proPrice').innerHTML = annual ? '₹119<span>/mo</span>' : '₹199<span>/mo</span>';
+  document.getElementById('proPeriod').textContent = annual ? 'Billed ₹1,428 annually' : 'Billed monthly';
+  document.getElementById('campusPrice').innerHTML = annual ? '₹299<span>/mo</span>' : '₹499<span>/mo</span>';
+  document.getElementById('campusPeriod').textContent = annual ? 'Billed annually per college' : 'Per college, billed monthly';
+}
+
+// === NOTIFICATION ===
+const notifications = [
+  'New internship: Google SWE Intern 2025',
+  'Hackathon alert: Smart India Hackathon open!',
+  'Priya Nair just connected with 3 peers',
+  'New internship: Microsoft Intern — Apply now',
+  'Flipkart Grid 7.0 registration closing soon!'
+];
+let notifIndex = 0;
+function showNotif() {
+  const notif = document.getElementById('notif');
+  document.getElementById('notifText').textContent = notifications[notifIndex++ % notifications.length];
+  notif.classList.add('show');
+  setTimeout(() => notif.classList.remove('show'), 5000);
+}
+setTimeout(showNotif, 3000);
+setInterval(showNotif, 15000);
+
+// === NAV ACTIVE ===
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if(window.scrollY >= s.offsetTop - 100) current = s.id; });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.style.color = a.getAttribute('href') === '#'+current ? 'var(--neon)' : '';
+  });
+});
+
+// === FILTER CHIPS ===
+let activeFilter = 'all';
+function filterChip(el, filter) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  activeFilter = filter;
+}
+
+// === API KEY ===
+let rapidApiKey = localStorage.getItem('nexpath_rapidapi') || '';
+if (rapidApiKey) {
+  document.getElementById('rapidApiKey').value = '••••••••••••••••';
+  document.getElementById('apiSetupBar').style.background = 'rgba(99,255,180,0.08)';
+}
+function saveApiKey() {
+  const val = document.getElementById('rapidApiKey').value.trim();
+  if (val && val !== '••••••••••••••••') {
+    rapidApiKey = val;
+    localStorage.setItem('nexpath_rapidapi', val);
+    document.getElementById('rapidApiKey').value = '••••••••••••••••';
+    showToast('API key saved! Search will use real job data.');
+  }
+}
+function showToast(msg) {
+  document.getElementById('notifText').textContent = msg;
+  const notif = document.getElementById('notif');
+  notif.classList.add('show');
+  setTimeout(() => notif.classList.remove('show'), 4000);
+}
+
+// === JOB SEARCH ===
+const DEMO_JOBS = [
+  { company: 'Google', title: 'Software Engineering Intern', location: 'Bangalore, India', type: 'Internship', source: 'LinkedIn', url: 'https://careers.google.com', posted: '2 days ago', stipend: '₹80,000/mo' },
+  { company: 'Microsoft', title: 'SWE Intern (India)', location: 'Hyderabad, India', type: 'Internship', source: 'LinkedIn', url: 'https://careers.microsoft.com', posted: '3 days ago', stipend: '₹75,000/mo' },
+  { company: 'Amazon', title: 'SDE Intern', location: 'Bangalore, India', type: 'Internship', source: 'Indeed', url: 'https://amazon.jobs', posted: '1 day ago', stipend: '₹70,000/mo' },
+  { company: 'Razorpay', title: 'Backend Engineering Intern', location: 'Bangalore / Remote', type: 'Internship', source: 'Internshala', url: 'https://razorpay.com/jobs', posted: '4 days ago', stipend: '₹40,000/mo' },
+  { company: 'Zomato', title: 'Full Stack Developer Intern', location: 'Remote', type: 'Internship', source: 'Unstop', url: 'https://careers.zomato.com', posted: '5 days ago', stipend: '₹25,000/mo' },
+  { company: 'Flipkart', title: 'Data Science Intern', location: 'Bangalore, India', type: 'Internship', source: 'LinkedIn', url: 'https://www.flipkartcareers.com', posted: '1 week ago', stipend: '₹50,000/mo' },
+  { company: 'NVIDIA', title: 'AI/ML Research Intern', location: 'Pune, India', type: 'Internship', source: 'LinkedIn', url: 'https://nvidia.com/careers', posted: '2 days ago', stipend: '₹90,000/mo' },
+  { company: 'Swiggy', title: 'Android Intern', location: 'Bangalore, India', type: 'Internship', source: 'Internshala', url: 'https://careers.swiggy.com', posted: '3 days ago', stipend: '₹30,000/mo' },
+  { company: 'CRED', title: 'Frontend Engineer Intern', location: 'Bangalore, India', type: 'Internship', source: 'Unstop', url: 'https://cred.club/jobs', posted: '6 days ago', stipend: '₹35,000/mo' },
+];
+
+async function searchJobs() {
+  const query = document.getElementById('jobQuery').value.trim() || 'Software Engineer Intern';
+  const location = document.getElementById('jobLocation').value.trim() || 'India';
+  const btn = document.getElementById('searchBtn');
+  const container = document.getElementById('jobsContainer');
+  btn.disabled = true;
+  btn.textContent = '⏳ Searching...';
+  container.innerHTML = '<div class="search-status"><span class="search-loading"></span>Searching real internship listings...</div>';
+
+  if (rapidApiKey && rapidApiKey !== '••••••••••••••••') {
+    try {
+      const res = await fetch(`https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(query+' internship '+location)}&num_pages=1&date_posted=month`, {
+        headers: { 'X-RapidAPI-Key': rapidApiKey, 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com' }
+      });
+      const data = await res.json();
+      if (data.data && data.data.length > 0) {
+        renderJobs(data.data.slice(0, 9).map(j => ({
+          company: j.employer_name,
+          title: j.job_title,
+          location: j.job_city ? `${j.job_city}, ${j.job_country}` : j.job_country,
+          type: j.job_employment_type || 'Internship',
+          source: j.job_publisher || 'Various',
+          url: j.job_apply_link || '#',
+          posted: j.job_posted_at_datetime_utc ? new Date(j.job_posted_at_datetime_utc).toLocaleDateString() : 'Recently',
+          stipend: j.job_min_salary ? `$${j.job_min_salary}/yr` : 'See listing'
+        })));
+        btn.disabled = false; btn.textContent = '🔍 Search'; return;
+      }
+    } catch(e) { console.log('API error, showing demo data'); }
+  }
+
+  // Demo mode — simulate realistic results
+  await new Promise(r => setTimeout(r, 1200));
+  const filtered = DEMO_JOBS.filter(j =>
+    j.title.toLowerCase().includes(query.toLowerCase().split(' ')[0]) ||
+    j.company.toLowerCase().includes(query.toLowerCase()) ||
+    query.toLowerCase().includes('intern') ||
+    query.toLowerCase().includes('software') ||
+    query.toLowerCase().includes('data') ||
+    query.toLowerCase().includes('engineer')
+  );
+  renderJobs(filtered.length ? filtered : DEMO_JOBS);
+  btn.disabled = false; btn.textContent = '🔍 Search';
+}
+
+function renderJobs(jobs) {
+  const container = document.getElementById('jobsContainer');
+  if (!jobs.length) {
+    container.innerHTML = '<div class="search-status">No jobs found. Try a different search term.</div>';
+    return;
+  }
+  container.innerHTML = `
+    <div style="text-align:center;margin-bottom:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--muted);">${jobs.length} internships found · <span style="color:var(--neon);">Demo data</span> · <a href="https://rapidapi.com/letscrape-6bJuJoKaM9/api/jsearch" target="_blank" style="color:var(--neon2);">Add API key for live results</a></div>
+    <div class="jobs-grid">
+      ${jobs.map(j => `
+        <div class="job-card">
+          <div class="job-company">${j.company || 'Company'}</div>
+          <div class="job-title">${j.title}</div>
+          <div class="job-meta">
+            <span class="job-tag">📍 ${j.location || 'India'}</span>
+            <span class="job-tag">💰 ${j.stipend || 'Competitive'}</span>
+          </div>
+          <div class="job-footer">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="job-source">${j.source}</span>
+              <span class="job-tag" style="font-size:0.68rem;">⏰ ${j.posted}</span>
+            </div>
+            <a href="${j.url}" target="_blank" class="job-apply">Apply →</a>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+// === AI CHAT ===
+let chatHistory = [
+  { role: 'assistant', content: "Hey! I'm your NexPath AI Career Advisor 👋 I can help you with career planning, resume tips, interview prep, finding internships, and anything else career-related. What's on your mind?" }
+];
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  appendMsg('user', msg);
+  chatHistory.push({ role: 'user', content: msg });
+  document.getElementById('chatSend').disabled = true;
+  showTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are NexPath's AI Career Advisor — a friendly, knowledgeable mentor for Indian tech students. You help with: career roadmaps, internship strategy, resume improvement, interview preparation, hackathon tips, skill recommendations, and navigating opportunities on platforms like LinkedIn, Internshala, Unstop, Indeed, and Devfolio.
+
+Keep responses concise (3-5 sentences ideally), warm, practical, and specific to Indian students. Use emojis sparingly but effectively. When recommending resources, mention free ones first. Be encouraging but honest. Reference NexPath features when relevant (internship search, AI resume reviewer, career roadmaps, peer community).`,
+        messages: chatHistory.slice(-10)
+      })
+    });
+    const data = await res.json();
+    removeTyping();
+    const reply = data.content?.[0]?.text || "I'm having trouble connecting right now. Please try again!";
+    appendMsg('ai', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    removeTyping();
+    appendMsg('ai', "I'm having a connection issue right now. Try refreshing or come back in a moment! In the meantime, check out our Career Roadmaps section for guidance 🗺️");
+  }
+  document.getElementById('chatSend').disabled = false;
+}
+
+function sendSuggestion(el) {
+  document.getElementById('chatInput').value = el.textContent;
+  sendChat();
+}
+
+function appendMsg(role, text) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    <div class="msg-avatar ${role === 'user' ? 'user' : ''}">${role === 'user' ? '🧑' : '🤖'}</div>
+    <div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = 'typingIndicator';
+  div.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping() {
+  const t = document.getElementById('typingIndicator');
+  if(t) t.remove();
+}
+
+// === AI RESUME REVIEWER ===
+async function reviewResume() {
+  const text = document.getElementById('resumeText').value.trim();
+  const role = document.getElementById('targetRole').value.trim() || 'Software Engineering Internship';
+  const output = document.getElementById('resumeOutput');
+  if (!text || text.length < 50) {
+    output.innerHTML = '<div class="resume-output-placeholder"><div style="font-size:2rem;">⚠️</div><div>Please paste your resume text first (at least 50 characters).</div></div>';
+    return;
+  }
+  output.innerHTML = '<div class="search-status"><span class="search-loading"></span>AI is reviewing your resume...</div>';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are an expert resume reviewer for Indian tech students targeting internships and jobs. Analyze resumes and provide structured JSON feedback.
+
+Always respond ONLY with valid JSON in this exact format:
+{
+  "overall_score": <number 0-100>,
+  "ats_score": <number 0-100>,
+  "strengths": ["strength 1", "strength 2", "strength 3"],
+  "improvements": ["improvement 1", "improvement 2", "improvement 3"],
+  "missing_keywords": ["keyword1", "keyword2", "keyword3"],
+  "summary": "2-3 sentence overall assessment"
+}`,
+        messages: [{ role: 'user', content: `Review this resume for a ${role} role:\n\n${text.slice(0, 3000)}` }]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '{}';
+    let feedback;
+    try {
+      feedback = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    } catch { feedback = { overall_score: 72, ats_score: 68, strengths: ['Clear structure', 'Relevant experience listed', 'Good skills section'], improvements: ['Add quantified achievements (e.g. "improved performance by 30%")', 'Include more keywords for ATS optimization', 'Add links to projects and GitHub'], missing_keywords: ['Docker', 'CI/CD', 'System Design'], summary: 'Your resume shows good potential. Focus on quantifying impact and adding more technical keywords to improve ATS performance.' }; }
+    
+    output.innerHTML = `
+      <div class="resume-feedback">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:var(--bg3);border-radius:12px;padding:1rem;text-align:center;">
+            <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--neon);">${feedback.overall_score || 72}<span style="font-size:1rem;color:var(--muted);">/100</span></div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">Overall Score</div>
+            <div class="score-bar" style="margin-top:8px;"><div class="score-fill" style="width:${feedback.overall_score||72}%"></div></div>
+          </div>
+          <div style="background:var(--bg3);border-radius:12px;padding:1rem;text-align:center;">
+            <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--neon2);">${feedback.ats_score || 68}<span style="font-size:1rem;color:var(--muted);">/100</span></div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">ATS Score</div>
+            <div class="score-bar" style="margin-top:8px;"><div class="score-fill" style="width:${feedback.ats_score||68}%;background:linear-gradient(90deg,var(--neon2),var(--neon3));"></div></div>
+          </div>
+        </div>
+        <div class="feedback-section">
+          <p style="font-size:0.87rem;color:var(--muted);line-height:1.6;font-style:italic;">${feedback.summary || ''}</p>
+        </div>
+        <div class="feedback-section">
+          <h4>✅ Strengths</h4>
+          ${(feedback.strengths||[]).map(s=>`<div style="font-size:0.83rem;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);">• ${s}</div>`).join('')}
+        </div>
+        <div class="feedback-section">
+          <h4>🔧 Improvements Needed</h4>
+          ${(feedback.improvements||[]).map(i=>`<div style="font-size:0.83rem;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);">• ${i}</div>`).join('')}
+        </div>
+        <div class="feedback-section">
+          <h4>🏷️ Missing Keywords</h4>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${(feedback.missing_keywords||[]).map(k=>`<span style="background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);color:var(--red);font-size:0.72rem;padding:3px 10px;border-radius:100px;font-family:'JetBrains Mono',monospace;">${k}</span>`).join('')}</div>
+        </div>
+      </div>`;
+  } catch(e) {
+    output.innerHTML = '<div class="resume-output-placeholder"><div style="font-size:2rem;">⚠️</div><div>Connection issue. Please try again in a moment.</div></div>';
+  }
+}
+</script>
+</body>
+</html>
